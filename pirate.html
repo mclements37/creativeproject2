@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Pirate Translator</title>
+	<link rel="stylesheet" href="main.css">
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+	<div class="card2">
+		<form>
+			<h1>Write your message here:</h1> <input type="text" id="pirateInput" placeholder="Ex: Hello there. How are you?" value=""><br>
+			<input id="button-pirate" type="submit" value="Pirate-ize me!">
+		</form>
+		<!--<h2>Result for: <span id="stack-result">No Result</span> </h2>-->
+		<div id="pirate-response"></div>
+	</div>
+</body>
+
+<script>
+$(document).ready(function() { //When the document is ready,
+
+		$("#button-pirate").click(function(e){
+
+$ curl -X POST http://textbelt.com/text \
+   -d number=801-669-7841 \
+   -d "message=I sent this message for free with textbelt.com"
+
+
+			var value = $("#pirateInput").val();
+			console.log(value);
+ 			e.preventDefault(); //Prevents the page refresh
+ 			$("#stack-result").text(value);
+
+ 			var myurl = "http://isithackday.com/arrpi.php?text="+$("#pirateInput").val() +"&format=json"; 
+ 			console.log(myurl);
+ 			$.ajax({
+ 				url : myurl,
+ 				dataType : "jsonp", //jsonp avoided the CORS error
+ 				success : function(parsed_json) {
+  					//var pirateoutput = parsed_json['translation']['pirate'];
+  					var pirateoutput = parsed_json.translation.pirate;
+  					
+  					everything = "<ul>";
+  					everything += "<li>"+ pirateoutput;
+  					everything += "</ul>";
+  					$("#pirate-response").html(everything);
+  				}
+  			});
+ 		});
+	});
+</script>
+
+
+</html>

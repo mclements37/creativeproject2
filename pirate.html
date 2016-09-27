@@ -15,17 +15,50 @@
 		</form>
 		<!--<h2>Result for: <span id="stack-result">No Result</span> </h2>-->
 		<div id="pirate-response"></div>
-	</div>
-</body>
 
+   <div id="countdowntimer"></div>
+
+
+
+
+</body>
+<script>
+CountDownTimer('09/19/2017 12:00 AM', 'countdowntimer');
+
+function CountDownTimer(date, id) {
+     var end = new Date(date);
+
+     var second = 1000;
+     var minute = second * 60;
+     var hour = minute * 60;
+     var day = hour * 24;
+     var timer;
+
+     function showRemaining() {
+         var now = new Date();
+         var distance = end - now;
+         
+         var days = Math.floor(distance / day);
+         var hours = Math.floor((distance % day) / hour);
+         var minutes = Math.floor((distance % hour) / minute);
+         var seconds = Math.floor((distance % minute) / second);
+
+         document.getElementById(id).innerHTML = days + ' days, ';
+         document.getElementById(id).innerHTML += hours + ' hours, ';
+         document.getElementById(id).innerHTML += minutes + ' minutes, and ';
+         document.getElementById(id).innerHTML += seconds + ' seconds until free dougnuts at Krispy Kreme for talk like a pirate day.';
+     }
+
+     timer = setInterval(showRemaining, 1000);
+ }
+</script>
 <script>
 $(document).ready(function() { //When the document is ready,
-
 		$("#button-pirate").click(function(e){
 			var value = $("#pirateInput").val();
 			console.log(value);
  			e.preventDefault(); //Prevents the page refresh
- 			$("#stack-result").text(value);
+ 			
 
  			var myurl = "http://isithackday.com/arrpi.php?text="+$("#pirateInput").val() +"&format=json"; 
  			console.log(myurl);
@@ -34,12 +67,21 @@ $(document).ready(function() { //When the document is ready,
  				dataType : "jsonp", //jsonp avoided the CORS error
  				success : function(parsed_json) {
   					//var pirateoutput = parsed_json['translation']['pirate'];
-  					var pirateoutput = parsed_json.translation.pirate;
-  					
-  					everything = "<ul>";
-  					everything += "<li>"+ pirateoutput;
-  					everything += "</ul>";
-  					$("#pirate-response").html(everything);
+  					var pirateOutput = parsed_json.translation.pirate;
+  					//get Chuck fact!
+					$.ajax({
+						url : "https://api.chucknorris.io/jokes/random",
+						datatype : 'json',
+						success : function(data) {
+						var chuckOutput = data.value;				
+								everything = "<ul>";
+								everything += "<li>"+ pirateOutput
+								everything += "<li>"+ "Yee best be need'in a joke. How 'bout this matey: " + chuckOutput;
+								everything += "</ul>";
+								$("#pirate-response").html(everything);
+					
+						}
+					});
   				}
   			});
  		});
